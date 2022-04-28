@@ -1,6 +1,7 @@
 # freelance-marketplace-backend
 
-App idea
+**App idea**
+
 A freelancing app for Cornell students to post and purchase any jobs they would like to do. For example, a user can offer a haircut for $25 and another user could purchase that service. 
 
 Users will have to sign in to use our app (we haven't decided whether to use Google authentication or to keep our own database yet). There will be a homepage, which will display all the listings. Each user will have a profile, which will include all of their listings and past purchases. Each listing can also be clicked open to display more details and purchase information. 
