@@ -1,0 +1,130 @@
+Expected Functionality:
+
+
+Getting all Listings
+GET http://localhost:5000/listings/
+<HTTP STATUS CODE 200>
+{
+  "listings": [
+    {
+      "id": 0,
+      "unixTime": <>,
+      "title": <>,
+      "description": <>,
+      "availability": <>,
+      "location": <>,
+      "price": <>,
+      "sellers: <>,
+      "buyers": <>
+    },
+    {
+      "id": 1,
+      "unixTime": <>,
+      "title": <>,
+      "description": <>,
+      "availability": <>,
+      "location": <>,
+      "price": <>,
+      "sellers: <>,
+      "buyers": <>
+    },
+    ...
+  ]
+}
+
+Getting details for specific listing
+GET http://localhost:5000/listings/<int:listing_id>/
+<HTTP STATUS CODE 200>
+{
+    "id": 1,
+    "unixTime": <>,
+    "title": <>,
+    "description": <>,
+    "availability": <>,
+    "location": <>,
+    "price": <>,
+    "sellers: <>,
+    "buyers": <>
+}
+
+Create Listing 
+POST http://localhost:5000/listings/
+Request:
+{
+    "seller_id":
+    "title":
+    "description":
+    "availability:
+    "location":
+    "price":
+}
+
+Delete Listing (with authentication)
+DELETE http://localhost:5000/listings/<int:listing_id>/
+<HTTP STATUS CODE 200>
+{
+    "id": <>,
+    "unixTime": <>,
+    "title": <>,
+    "description": <>,
+    "availability": <>,
+    "location": <>,
+    "price": <>,
+    "sellers: <>,
+    "buyers": <>
+}
+
+
+Get all users for testing
+GET http://localhost:5000/users/
+<HTTP STATUS CODE 200>
+{
+    "id": <>,
+    "username": <>,
+    "seller_listings": <>,
+    "buyer_listings": <>
+}
+
+Sign up new user
+POST http://localhost:5000/users/
+<HTTP STATUS CODE 200>
+{
+    "id": <>,
+    "username": <>,
+    "seller_listings": <>,
+    "buyer_listings": <>
+}
+
+Get user (view profile)
+GET http://localhost:5000/users/<int:user_id>/
+<HTTP STATUS CODE 200>
+{
+    "id": <>,
+    "username": <>,
+    "seller_listings": <>,
+    "buyer_listings": <>
+}
+
+Log in 
+POST http://localhost:5000/login/
+<HTTP STATUS CODE 200>
+{
+    "username": <>,
+    "password" <>
+}
+
+Purchase listing (user id given through front end?)
+POST http://localhost:5000/listings/<int:listing_id>/purchase/
+<HTTP STATUS CODE 200>
+Request
+{
+    "id": 1,
+    "unixTime": <>,
+    "title": <>,
+    "description": <>,
+    "availability": <>,
+    "location": <>,
+    "price": <>,
+    "sellers: <>,
+    "buyers": <>
+}
