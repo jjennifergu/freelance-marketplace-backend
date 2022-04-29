@@ -5,18 +5,18 @@ from urllib import request
 from flask import Flask
 from flask import request
 
-# from db import db, Listing, User
+from db import db, Listing, User
 
 app = Flask(__name__)
-# db_filename = "todo.db"
+db_filename = "todo.db"
 
-# app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_filename}"
-# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-# app.config["SQLALCHEMY_ECHO"] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_filename}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ECHO"] = True
 
-# db.init_app(app)
-# with app.app_context():
-#     db.create_all()
+db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 
 # generalized response formats
@@ -37,7 +37,9 @@ def get_all_listings():
     """
     Endpoint for getting all listings
     """
-    pass
+    return success_response(
+        {"listings": [l.serialize() for l in Listing.query.all()]}
+    )
 
 #listing details
 @app.route("/listings/<int:listing_id>/")
@@ -45,7 +47,10 @@ def get_listing(listing_id):
     """
     Endpoint for getting a listing by id
     """
-    pass
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if listing is None:
+        return failure_response("Listing not found!")
+    return success_response(listing.serialize())
 
 #create listing, should have associated seller id & populate association table
 @app.route("/listings/", methods=["POST"])
@@ -53,15 +58,33 @@ def create_listing():
     """
     Endpoint for creating a listing
     """
-    pass
+    body = json.loads(request.data)
+    try:
+        new_listing = Listing(
+            unixTime = body.get("unixTime"),
+            title = body.get("title"),
+            category = body.get("category"),
+            description = body.get("description"),
+            availability = body.get("availability"),
+            location = body.get("location"),
+            price = body.get("price")
+        )
+    except Exception:
+        return failure_response("Invalid fields", 400)
+    
 
 #delete listing, need to implement authentication
 @app.route("/listings/<int:listing_id>/", methods=["DELETE"])
-def delete_listing():
+def delete_listing(listing_id):
     """
     Endpoint for deleting a listing by id
     """
-    pass
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if listing is None:
+        return failure_response("Listing not found!")
+    db.session.delete(listing)
+    db.session.commit()
+    return success_response(listing.serialize())
 
 #used for testing
 @app.route("/users/")
