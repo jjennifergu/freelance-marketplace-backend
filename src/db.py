@@ -45,11 +45,21 @@ class Listing(db.Model):
         self.location = kwargs.get("location")
         self.price = kwargs.get("price")
 
-    #need to add serialization functions
-    """
-    get date from unixTime: datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y")
-    get time from unixTime: datetime.fromtimestamp(self.unixTime).strftime("%H:%M")
-    """
+    def serialize(self):        
+        """
+        serialize a Task object
+        """
+        return {      
+            "id": self.id,      
+            "date": datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y"),            
+            "time": datetime.fromtimestamp(self.unixTime).strftime("%H:%M"),
+            "title": self.title,            
+            "description": self.description,
+            "availability": self.availability,
+            "location": self.location,
+            "price": self.price
+        }
+    
 
 class User(db.Model):
     """
