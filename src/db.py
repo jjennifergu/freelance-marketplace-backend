@@ -27,6 +27,7 @@ class Listing(db.Model):
     #frontend gives unixTime, backend returns date and time
     unixTime = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String, nullable=False)
+    category=db.Column(db.String, nullable=False)
     description=db.Column(db.String, nullable=False)
     availability=db.Column(db.String, nullable=False)
     location=db.Column(db.String, nullable=False)
@@ -47,13 +48,32 @@ class Listing(db.Model):
 
     def serialize(self):        
         """
-        serialize a Task object
+        serialize a Listing object
         """
         return {      
             "id": self.id,      
             "date": datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y"),            
             "time": datetime.fromtimestamp(self.unixTime).strftime("%H:%M"),
-            "title": self.title,            
+            "title": self.title,
+            "category": self.category,            
+            "description": self.description,
+            "availability": self.availability,
+            "location": self.location,
+            "price": self.price,
+            "sellers": [s.simple_serialize() for s in self.sellers],
+            "buyers": [b.simple_serialize() for b in self.buyers]
+        }
+
+    def simple_serialize(self):
+        """
+        Simple serializes a Listing object
+        """
+        return {
+            "id": self.id,      
+            "date": datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y"),            
+            "time": datetime.fromtimestamp(self.unixTime).strftime("%H:%M"),
+            "title": self.title,
+            "category": self.category,            
             "description": self.description,
             "availability": self.availability,
             "location": self.location,
@@ -68,6 +88,7 @@ class User(db.Model):
     __tablename__="users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String, nullable=False)
+    contact = db.Column(db.String, nullable=False)
     seller_listings=db.relationship("Listing", secondary=seller_association_table, back_populates="sellers")
     buyer_listings=db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
 
@@ -77,4 +98,24 @@ class User(db.Model):
         """
         self.username = kwargs.get("username", "")
     
-    #need to add serialization functions
+    def serialize(self):        
+        """
+        serialize a User object
+        """
+        return {      
+            "id": self.id,      
+            "username": self.username,
+            "contact": self.contact,
+            "seller_listings": [s.simple_serialize() for s in self.seller_listings],
+            "buyers_listings": [b.simple_serialize() for b in self.buyer_listings]
+        }
+
+    def simple_serialize(self):
+        """
+        Simple serializes a User object
+        """
+        return {
+            "id": self.id,      
+            "username": self.username,
+            "contact": self.contact
+        }

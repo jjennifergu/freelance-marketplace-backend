@@ -37,7 +37,9 @@ def get_all_listings():
     """
     Endpoint for getting all listings
     """
-    pass
+    return success_response(
+        {"listings": [l.serialize() for l in Listing.query.all()]}
+    )
 
 #listing details
 @app.route("/listings/<int:listing_id>/")
@@ -45,7 +47,10 @@ def get_listing(listing_id):
     """
     Endpoint for getting a listing by id
     """
-    pass
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if listing is None:
+        return failure_response("Listing not found!")
+    return success_response(listing.serialize())
 
 #create listing, should have associated seller id & populate association table
 @app.route("/listings/", methods=["POST"])
@@ -53,7 +58,20 @@ def create_listing():
     """
     Endpoint for creating a listing
     """
-    pass
+    body = json.loads(request.data)
+    try:
+        new_listing = Listing(
+            unixTime = body.get("unixTime"),
+            title = body.get("title"),
+            category = body.get("category"),
+            description = body.get("description"),
+            availability = body.get("availability"),
+            location = body.get("location"),
+            price = body.get("price")
+        )
+    except Exception:
+        return failure_response("Invalid fields", 400)
+    
 
 #delete listing, need to implement authentication
 @app.route("/listings/<int:listing_id>/", methods=["DELETE"])
