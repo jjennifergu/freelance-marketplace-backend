@@ -92,7 +92,8 @@ def get_all_users():
     """
     Endpoint for getting all users
     """
-    pass
+    return success_response({"users": [u.serialize() for u in User.query.all()]})
+
 
 #sign up
 @app.route("/users/", methods=["POST"])
@@ -104,11 +105,14 @@ def create_user():
 
 #view profile
 @app.route("/users/<int:user_id>/")
-def get_user():
+def get_user(user_id):
     """
     Endpoint for getting a user by id
     """
-    pass
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response("User not found!")
+    return success_response(user.serialize())
 
 #need to add log in route, idk how to do it :P
 
