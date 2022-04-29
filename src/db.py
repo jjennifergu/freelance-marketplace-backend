@@ -1,3 +1,4 @@
+from enum import auto
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -6,13 +7,13 @@ db = SQLAlchemy()
 buyer_association_table = db.Table(
     "buyer_association",
     db.Column("listing_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("user_id"), db.Interger, db.ForeignKey("listings.id")
+    db.Column("user_id"), db.Integer, db.ForeignKey("listings.id")
 )
 
 seller_association_table = db.Table(
     "seller_association",
     db.Column("listing_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("user_id"), db.Interger, db.ForeignKey("listings.id")
+    db.Column("user_id"), db.Integer, db.ForeignKey("listings.id")
 )
 
 class Listing(db.Model):
@@ -44,11 +45,21 @@ class Listing(db.Model):
         self.location = kwargs.get("location")
         self.price = kwargs.get("price")
 
-    #need to add serialization functions
-    """
-    get date from unixTime: datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y")
-    get time from unixTime: datetime.fromtimestamp(self.unixTime).strftime("%H:%M")
-    """
+    def serialize(self):        
+        """
+        serialize a Task object
+        """
+        return {      
+            "id": self.id,      
+            "date": datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y"),            
+            "time": datetime.fromtimestamp(self.unixTime).strftime("%H:%M"),
+            "title": self.title,            
+            "description": self.description,
+            "availability": self.availability,
+            "location": self.location,
+            "price": self.price
+        }
+    
 
 class User(db.Model):
     """
