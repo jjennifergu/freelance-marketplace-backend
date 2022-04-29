@@ -1,0 +1,6 @@
+version: '3'
+services:
+  pa6:
+    image: marketplace/fp
+    ports:
+      - "5000:5000"

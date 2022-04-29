@@ -75,11 +75,16 @@ def create_listing():
 
 #delete listing, need to implement authentication
 @app.route("/listings/<int:listing_id>/", methods=["DELETE"])
-def delete_listing():
+def delete_listing(listing_id):
     """
     Endpoint for deleting a listing by id
     """
-    pass
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if listing is None:
+        return failure_response("Listing not found!")
+    db.session.delete(listing)
+    db.session.commit()
+    return success_response(listing.serialize())
 
 #used for testing
 @app.route("/users/")
