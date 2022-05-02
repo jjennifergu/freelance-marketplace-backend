@@ -93,6 +93,9 @@ def create_listing():
             location = body.get("location"),
             price = body.get("price")
         )
+        db.session.add(new_listing)
+        db.session.commit()
+        return success_response(new_listing.serialize(), 201)
     except Exception:
         return failure_response("Invalid fields", 400)
     

@@ -19,8 +19,8 @@ class Listing(db.Model):
     """
     Listing model
 
-    Has a many-to-many relationship with buyers
     Has a one-to-many relationship with sellers
+    Has a many-to-many relationship with buyers
     """
     __tablename__="listings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -85,6 +85,8 @@ class Listing(db.Model):
 class User(db.Model):
     """
     User model
+    Sellers have a one-to-many relationship with Listings
+    Buyers have a many-to-many relationship with Listings
     """
     __tablename__="users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
