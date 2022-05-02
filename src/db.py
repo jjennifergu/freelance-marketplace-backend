@@ -6,6 +6,7 @@ import hashlib
 import os
 
 import bcrypt
+
 db = SQLAlchemy()
 
 buyer_association_table = db.Table(
@@ -14,17 +15,12 @@ buyer_association_table = db.Table(
     db.Column("user_id"), db.Integer, db.ForeignKey("listings.id")
 )
 
-seller_association_table = db.Table(
-    "seller_association",
-    db.Column("listing_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("user_id"), db.Integer, db.ForeignKey("listings.id")
-)
-
 class Listing(db.Model):
     """
     Listing model
 
-    Has a many-to-many relationship with User model
+    Has a many-to-many relationship with buyers
+    Has a one-to-many relationship with sellers
     """
     __tablename__="listings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -36,7 +32,7 @@ class Listing(db.Model):
     availability=db.Column(db.String, nullable=False)
     location=db.Column(db.String, nullable=False)
     price=db.Column(db.Integer, nullable=False)
-    sellers=db.relationship("User", secondary=seller_association_table, back_populates="seller_listings")
+    seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     buyers=db.relationship("User", secondary=buyer_association_table, back_populates="buyer_listings")
 
     def __init__(self, **kwargs):
@@ -54,6 +50,7 @@ class Listing(db.Model):
         """
         serialize a Listing object
         """
+        seller = User.query.filter_by(id=self.seller_id).first()
         return {      
             "id": self.id,      
             "date": datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y"),            
@@ -64,7 +61,7 @@ class Listing(db.Model):
             "availability": self.availability,
             "location": self.location,
             "price": self.price,
-            "sellers": [s.simple_serialize() for s in self.sellers],
+            "seller": seller.simple_serialize(),  
             "buyers": [b.simple_serialize() for b in self.buyers]
         }
 
@@ -93,8 +90,10 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String, nullable=False)
     contact = db.Column(db.String, nullable=False)
-    seller_listings=db.relationship("Listing", secondary=seller_association_table, back_populates="sellers")
-    buyer_listings=db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
+    seller_id = db.Column(db.Integer, db.ForeignKey("seller.id"), nullable=False)
+    # seller_listings=db.relationship("Listing", secondary=seller_association_table, back_populates="sellers")
+    # students = db.relationship("User", secondary=student_association_table, back_populates="student_courses")
+    buyer_listings = db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
 
     # User information
     email = db.Column(db.String, nullable=False, unique=True)
@@ -117,11 +116,12 @@ class User(db.Model):
         """
         serialize a User object
         """
+        seller = User.query.filter_by(id=self.seller_id).first()
         return {      
             "id": self.id,      
             "username": self.username,
             "contact": self.contact,
-            "seller_listings": [s.simple_serialize() for s in self.seller_listings],
+            "seller": seller.simple_serialize(),
             "buyers_listings": [b.simple_serialize() for b in self.buyer_listings]
         }
 
