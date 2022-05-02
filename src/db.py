@@ -1,7 +1,11 @@
 from enum import auto
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import datetime
+import hashlib
+import os
 
+import bcrypt
 db = SQLAlchemy()
 
 buyer_association_table = db.Table(
@@ -92,11 +96,22 @@ class User(db.Model):
     seller_listings=db.relationship("Listing", secondary=seller_association_table, back_populates="sellers")
     buyer_listings=db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
 
+    # User information
+    email = db.Column(db.String, nullable=False, unique=True)
+    password_digest = db.Column(db.String, nullable=False)
+
+    # Session information
+    session_token = db.Column(db.String, nullable=False, unique=True)
+    session_expiration = db.Column(db.DateTime, nullable=False)
+    update_token = db.Column(db.String, nullable=False, unique=True)
+
     def __init__(self, **kwargs):
         """
         initializes User object
         """
         self.username = kwargs.get("username", "")
+        self.password_digest = bcrypt.hashpw(kwargs.get("password").encode("utf8"), bcrypt.gensalt(rounds=13))
+        self.renew_session()
     
     def serialize(self):        
         """
