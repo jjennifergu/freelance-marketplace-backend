@@ -52,14 +52,14 @@ def get_all_listings():
     """
     Endpoint for getting all listings
     """
-    # was_successful, session_token = extract_token(request)
+    was_successful, session_token = extract_token(request)
 
-    # if not was_successful:
-    #     return session_token
+    if not was_successful:
+        return session_token
 
-    # user = users_dao.get_user_by_session_token(session_token) 
-    # if not user or not user.verify_session_token(session_token):
-    #     return failure_response("Invalid session token")
+    user = users_dao.get_user_by_session_token(session_token) 
+    if not user or not user.verify_session_token(session_token):
+        return failure_response("Invalid session token")
 
     return success_response(
         {"listings": [l.serialize() for l in Listing.query.all()]}
@@ -131,13 +131,15 @@ def create_user():
     Endpoint for creating a user
     """
     body = json.loads(request.data)
-    email = body.get("email")
+    username = body.get("username")
     password = body.get("password")
+    contact = body.get("contact")
 
-    if email is None or password is None: 
-        return failure_response("Missing email or password")
 
-    was_successful, user = users_dao.create_user(email,password)
+    if username is None or password is None: 
+        return failure_response("Missing username or password")
+
+    was_successful, user = users_dao.create_user(username,password)
 
     if not was_successful:
         return failure_response("User already exists")
@@ -175,13 +177,13 @@ def login():
     Endpoint for logging in a user
     """
     body = json.loads(request.data)
-    email = body.get("email")
+    username = body.get("username")
     password = body.get("password")
 
-    if email is None or password is None:
-        return failure_response("Missing email or password", 400)
+    if username is None or password is None:
+        return failure_response("Missing username or password", 400)
 
-    was_successful, user = users_dao.verify_credentials(email,password)
+    was_successful, user = users_dao.verify_credentials(username,password)
 
     if not was_successful:
         return failure_response("Incorrect username or password", 401)

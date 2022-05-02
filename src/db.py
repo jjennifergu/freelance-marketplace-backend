@@ -91,15 +91,12 @@ class User(db.Model):
     """
     __tablename__="users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String, nullable=False)
-    contact = db.Column(db.String, nullable=False)
-    # seller_id = db.Column(db.Integer, db.ForeignKey("seller.id"), nullable=False)
+    contact = db.Column(db.String, nullable=True)
     seller_listings=db.relationship("Listing", cascade="delete")
-    # students = db.relationship("User", secondary=student_association_table, back_populates="student_courses")
     buyer_listings = db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
 
     # User information
-    email = db.Column(db.String, nullable=False, unique=True)
+    username = db.Column(db.String, nullable=False, unique=True)
     password_digest = db.Column(db.String, nullable=False)
 
     # Session information
