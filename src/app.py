@@ -205,8 +205,8 @@ def purchase_listing(listing_id, user_id):
     if not was_successful:
         return session_token
 
-    user = users_dao.get_user_by_session_token(session_token) 
-    if not user or not user.verify_session_token(session_token):
+    current_user = users_dao.get_user_by_session_token(session_token) 
+    if not current_user or not current_user.verify_session_token(session_token):
         return failure_response("Invalid session token")
 
     #############

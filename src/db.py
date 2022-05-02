@@ -11,8 +11,9 @@ db = SQLAlchemy()
 
 buyer_association_table = db.Table(
     "buyer_association",
+    db.Model.metadata,
     db.Column("listing_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("user_id"), db.Integer, db.ForeignKey("listings.id")
+    db.Column("user_id", db.Integer, db.ForeignKey("listings.id"))
 )
 
 class Listing(db.Model):
@@ -92,8 +93,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String, nullable=False)
     contact = db.Column(db.String, nullable=False)
-    seller_id = db.Column(db.Integer, db.ForeignKey("seller.id"), nullable=False)
-    # seller_listings=db.relationship("Listing", secondary=seller_association_table, back_populates="sellers")
+    # seller_id = db.Column(db.Integer, db.ForeignKey("seller.id"), nullable=False)
+    seller_listings=db.relationship("Listing", cascade="delete")
     # students = db.relationship("User", secondary=student_association_table, back_populates="student_courses")
     buyer_listings = db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
 
@@ -118,12 +119,11 @@ class User(db.Model):
         """
         serialize a User object
         """
-        seller = User.query.filter_by(id=self.seller_id).first()
         return {      
             "id": self.id,      
             "username": self.username,
             "contact": self.contact,
-            "seller": seller.simple_serialize(),
+            "seller_listings": [s.simple_serialize() for s in self.seller_listings],
             "buyers_listings": [b.simple_serialize() for b in self.buyer_listings]
         }
 
