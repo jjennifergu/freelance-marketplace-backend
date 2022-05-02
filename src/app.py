@@ -195,8 +195,8 @@ def login():
     )
 
 #purchase listing, give user id in body?
-@app.route("/listings/<int:listing_id>/purchase/", methods=["POST"])
-def purchase_listing(listing_id):
+@app.route("/listings/<int:listing_id>/<int:user_id>/purchase/", methods=["POST"])
+def purchase_listing(listing_id, user_id):
     """
     Endpoint for purchasing a listing by listing id
     """
@@ -209,9 +209,28 @@ def purchase_listing(listing_id):
     if not user or not user.verify_session_token(session_token):
         return failure_response("Invalid session token")
 
+    #############
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response("User not found!")
+    # process request body if course is found
+    body = json.loads(request.data)
+    listing_id = body.get("listing_id")
+    # user_type = body.get("type")
+    # assign user to course
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if listing is None:
+        return failure_response("User not found!")
+    user.buyer_listings.append(listing)
+    db.session.commit()
+    return success_response(user.serialize())
+    ############
+
     return success_response(
         {"message": "You have successfully implemented sessions!"}
     )
+
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
