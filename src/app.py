@@ -52,15 +52,15 @@ def get_all_listings():
     """
     Endpoint for getting all listings
     """
-    was_successful, session_token = extract_token(request)
+    # was_successful, session_token = extract_token(request)
 
-    if not was_successful:
-        return session_token
+    # if not was_successful:
+    #     return session_token
 
-    user = users_dao.get_user_by_session_token(session_token) 
-    if not user or not user.verify_session_token(session_token):
-        return failure_response("Invalid session token")
-        
+    # user = users_dao.get_user_by_session_token(session_token) 
+    # if not user or not user.verify_session_token(session_token):
+    #     return failure_response("Invalid session token")
+
     return success_response(
         {"listings": [l.serialize() for l in Listing.query.all()]}
     )
@@ -77,8 +77,8 @@ def get_listing(listing_id):
     return success_response(listing.serialize())
 
 #create listing, should have associated seller id & populate association table
-@app.route("/listings/", methods=["POST"])
-def create_listing():
+@app.route("/listings/<int:seller_id>", methods=["POST"])
+def create_listing(seller_id):
     """
     Endpoint for creating a listing
     """
@@ -91,7 +91,8 @@ def create_listing():
             description = body.get("description"),
             availability = body.get("availability"),
             location = body.get("location"),
-            price = body.get("price")
+            price = body.get("price"),
+            seller_id = seller_id,
         )
         db.session.add(new_listing)
         db.session.commit()
