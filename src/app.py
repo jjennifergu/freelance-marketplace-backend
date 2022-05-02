@@ -1,4 +1,6 @@
 import json
+import users_dao
+import datetime
 from unicodedata import category
 from urllib import request
 
@@ -26,6 +28,19 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"error": message}), code
 
+def extract_token(request):
+    """
+    Helper function that extracts the token from the header of a request
+    """
+    auth_header = request.headers.get("Authorization")
+    
+    if auth_header is None:
+        return False, json.dumps({"Missing authorization header"})
+
+    bearer_token = auth_header.replace("Bearer", "").strip()
+
+    return True, bearer_token
+
 
 @app.route("/")
 def hello_world():
@@ -37,6 +52,15 @@ def get_all_listings():
     """
     Endpoint for getting all listings
     """
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    user = users_dao.get_user_by_session_token(session_token) 
+    if not user or not user.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+        
     return success_response(
         {"listings": [l.serialize() for l in Listing.query.all()]}
     )
@@ -92,29 +116,80 @@ def get_all_users():
     """
     Endpoint for getting all users
     """
-    return success_response({"users": [u.serialize() for u in User.query.all()]})
+    return success_response(
+        {"users": [u.serialize() for u in User.query.all()]}
+    )
 
-
-#sign up
+#sign up, register new user
 @app.route("/users/", methods=["POST"])
 def create_user():
     """
     Endpoint for creating a user
     """
-    pass
+    body = json.loads(request.data)
+    email = body.get("email")
+    password = body.get("password")
 
-#view profile
+    if email is None or password is None: 
+        return failure_response("Missing email or password")
+
+    was_successful, user = users_dao.create_user(email,password)
+
+    if not was_successful:
+        return failure_response("User already exists")
+
+    return success_response(
+        {
+            "session_token": user.session_token,
+            "session_expiration": str(user.session_expiration),
+            "update_token": user.update_token
+        }, 201
+    )
+
+#view profile with authentication
 @app.route("/users/<int:user_id>/")
 def get_user(user_id):
     """
     Endpoint for getting a user by id
     """
-    user = User.query.filter_by(id=user_id).first()
-    if user is None:
-        return failure_response("User not found!")
-    return success_response(user.serialize())
+    was_successful, session_token = extract_token(request)
 
-#need to add log in route, idk how to do it :P
+    if not was_successful:
+        return session_token
+
+    user = users_dao.get_user_by_session_token(session_token) 
+    if not user or not user.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+
+    return success_response(user.serialize())
+    
+
+#log in route
+@app.route("/login/", methods=["POST"])
+def login():
+    """
+    Endpoint for logging in a user
+    """
+    body = json.loads(request.data)
+    email = body.get("email")
+    password = body.get("password")
+
+    if email is None or password is None:
+        return failure_response("Missing email or password", 400)
+
+    was_successful, user = users_dao.verify_credentials(email,password)
+
+    if not was_successful:
+        return failure_response("Incorrect username or password", 401)
+
+    return success_response(
+        {
+            "session_token": user.session_token,
+            "session_expiration": str(user.session_expiration),
+            "update_token": user.update_token
+
+        }
+    )
 
 #purchase listing, give user id in body?
 @app.route("/listings/<int:listing_id>/purchase/", methods=["POST"])
@@ -122,7 +197,18 @@ def purchase_listing(listing_id):
     """
     Endpoint for purchasing a listing by listing id
     """
-    pass
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    user = users_dao.get_user_by_session_token(session_token) 
+    if not user or not user.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+
+    return success_response(
+        {"message": "You have successfully implemented sessions!"}
+    )
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
