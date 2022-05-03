@@ -25,8 +25,6 @@ class Listing(db.Model):
     """
     __tablename__="listings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    #frontend gives unixTime, backend returns date and time
-    # unixTime = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String, nullable=False)
     category=db.Column(db.String, nullable=False)
     description=db.Column(db.String, nullable=False)
@@ -40,7 +38,6 @@ class Listing(db.Model):
         """
         initialize Listing object
         """
-        self.unixTime = kwargs.get("unixTime")
         self.title = kwargs.get("title")
         self.category = kwargs.get("category")
         self.description = kwargs.get("description")
@@ -55,9 +52,7 @@ class Listing(db.Model):
         """
         seller = User.query.filter_by(id=self.seller_id).first()
         return {      
-            "id": self.id,      
-            # "date": datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y"),            
-            # "time": datetime.fromtimestamp(self.unixTime).strftime("%H:%M"),
+            "id": self.id,
             "title": self.title,
             "category": self.category,            
             "description": self.description,
@@ -72,16 +67,16 @@ class Listing(db.Model):
         """
         Simple serializes a Listing object
         """
+        seller = User.query.filter_by(id=self.seller_id).first()
         return {
-            "id": self.id,      
-            # "date": datetime.fromtimestamp(self.unixTime).strftime("%m/%d/%Y"),            
-            # "time": datetime.fromtimestamp(self.unixTime).strftime("%H:%M"),
+            "id": self.id, 
             "title": self.title,
             "category": self.category,            
             "description": self.description,
             "availability": self.availability,
             "location": self.location,
-            "price": self.price
+            "price": self.price,
+            "seller": self.seller.username
         }
     
 

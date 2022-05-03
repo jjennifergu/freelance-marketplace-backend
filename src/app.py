@@ -85,7 +85,6 @@ def create_listing(seller_id):
     body = json.loads(request.data)
     try:
         new_listing = Listing(
-            unixTime = body.get("unixTime"),
             title = body.get("title"),
             category = body.get("category"),
             description = body.get("description"),
