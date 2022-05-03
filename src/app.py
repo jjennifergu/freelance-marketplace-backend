@@ -57,10 +57,10 @@ def get_all_listings():
     if not was_successful:
         return session_token
 
-    user = users_dao.get_user_by_session_token(session_token) 
+    user = users_dao.renew_session(session_token)
     if not user or not user.verify_session_token(session_token):
         return failure_response("Invalid session token")
-
+        
     return success_response(
         {"listings": [l.serialize() for l in Listing.query.all()]}
     )
@@ -77,7 +77,7 @@ def get_listing(listing_id):
     return success_response(listing.serialize())
 
 #create listing, should have associated seller id & populate association table
-@app.route("/listings/<int:seller_id>", methods=["POST"])
+@app.route("/listings/<int:seller_id>/", methods=["POST"])
 def create_listing(seller_id):
     """
     Endpoint for creating a listing
@@ -97,8 +97,8 @@ def create_listing(seller_id):
         db.session.add(new_listing)
         db.session.commit()
         return success_response(new_listing.serialize(), 201)
-    except Exception:
-        return failure_response("Invalid fields", 400)
+    except Exception as e:
+        return failure_response(f"Invalid fields, {e}", 400)
     
 
 #delete listing, need to implement authentication
@@ -120,6 +120,16 @@ def get_all_users():
     """
     Endpoint for getting all users
     """
+    was_successful, update_token = extract_token(request)
+
+    if not was_successful:
+        return update_token
+
+    try:
+        user = users_dao.renew_session(update_token)
+    except Exception as e:
+        return failure_response(f"Invalid update token: {str(e)}")
+        
     return success_response(
         {"users": [u.serialize() for u in User.query.all()]}
     )
