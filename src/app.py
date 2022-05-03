@@ -134,15 +134,20 @@ def create_user():
     username = body.get("username")
     password = body.get("password")
     contact = body.get("contact")
-
-
+    
     if username is None or password is None: 
         return failure_response("Missing username or password")
 
-    was_successful, user = users_dao.create_user(username,password)
+    try:
+        was_successful, user = users_dao.create_user(username, password, contact)
 
-    if not was_successful:
-        return failure_response("User already exists")
+        if not was_successful:
+            return failure_response("User already exists")
+        # return success_response(new_course.serialize(), 201)
+    except Exception as e:
+        return failure_response(f"Invalid fields, {e}", 400)
+
+    
 
     return success_response(
         {

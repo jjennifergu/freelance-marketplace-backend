@@ -88,10 +88,11 @@ class User(db.Model):
     User model
     Sellers have a one-to-many relationship with Listings
     Buyers have a many-to-many relationship with Listings
+    contact, username, password_digest, session_token, session_expiration, update_token
     """
     __tablename__="users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    contact = db.Column(db.String, nullable=True)
+    contact = db.Column(db.String, nullable=False)
     seller_listings=db.relationship("Listing", cascade="delete")
     buyer_listings = db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
 
@@ -108,6 +109,7 @@ class User(db.Model):
         """
         initializes User object
         """
+        self.contact = kwargs.get("contact")
         self.username = kwargs.get("username", "")
         self.password_digest = bcrypt.hashpw(kwargs.get("password").encode("utf8"), bcrypt.gensalt(rounds=13))
         self.renew_session()
