@@ -45,6 +45,7 @@ class Listing(db.Model):
         self.availability = kwargs.get("availability")
         self.location = kwargs.get("location")
         self.price = kwargs.get("price")
+        self.picture = kwargs.get("picture")
         self.seller_id = kwargs.get("seller_id")
 
     def serialize(self):        
@@ -60,6 +61,7 @@ class Listing(db.Model):
             "availability": self.availability,
             "location": self.location,
             "price": self.price,
+            "picture": self.picture,
             "seller": seller.simple_serialize(),  
             "buyers": [b.simple_serialize() for b in self.buyers]
         }
@@ -77,7 +79,8 @@ class Listing(db.Model):
             "availability": self.availability,
             "location": self.location,
             "price": self.price,
-            "seller": self.seller.username
+            "picture": self.picture,
+            "seller": seller.username
         }
     
 

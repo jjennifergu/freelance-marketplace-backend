@@ -92,7 +92,7 @@ def create_listing(seller_id):
             location = body.get("location"),
             price = body.get("price"),
             picture = body.get("picture"),
-            seller_id = seller_id,
+            seller_id = seller_id
         )
         db.session.add(new_listing)
         db.session.commit()
@@ -161,16 +161,6 @@ def get_all_users():
     """
     Endpoint for getting all users
     """
-    was_successful, update_token = extract_token(request)
-
-    if not was_successful:
-        return update_token
-
-    try:
-        user = users_dao.renew_session(update_token)
-    except Exception as e:
-        return failure_response(f"Invalid update token: {str(e)}")
-        
     return success_response(
         {"users": [u.serialize() for u in User.query.all()]}
     )
@@ -192,7 +182,7 @@ def create_user():
         return failure_response("Missing username or password")
 
     try:
-        was_successful, user = users_dao.create_user(username, password, contact)
+        was_successful, user = users_dao.create_user(username, password, name, bio, contact)
 
         if not was_successful:
             return failure_response("User already exists")
