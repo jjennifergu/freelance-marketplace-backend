@@ -308,13 +308,11 @@ def purchase_listing(listing_id, user_id):
     if user is None:
         return failure_response("User not found!")
     # process request body if course is found
-    body = json.loads(request.data)
-    listing_id = body.get("listing_id")
     # user_type = body.get("type")
     # assign user to course
     listing = Listing.query.filter_by(id=listing_id).first()
     if listing is None:
-        return failure_response("User not found!")
+        return failure_response("Listing not found!")
     user.buyer_listings.append(listing)
     db.session.commit()
     return success_response(user.serialize())
