@@ -146,11 +146,11 @@ def edit_listing(listing_id):
     body = json.loads(request.data)
     
     listing.title = body.get("title")
-    listing.category = body.get("category"),
-    listing.description = body.get("description"),
-    listing.availability = body.get("availability"),
-    listing.location = body.get("location"),
-    listing.price = body.get("price"),
+    listing.category = body.get("category")
+    listing.description = body.get("description")
+    listing.availability = body.get("availability")
+    listing.location = body.get("location")
+    listing.price = body.get("price")
     listing.picture = body.get("picture")
     db.session.commit()
     return success_response(listing.serialize())
