@@ -57,7 +57,7 @@ def get_all_listings():
     if not was_successful:
         return session_token
 
-    user = users_dao.renew_session(session_token)
+    user = users_dao.get_user_by_session_token (session_token)
     if not user or not user.verify_session_token(session_token):
         return failure_response("Invalid session token")
         
