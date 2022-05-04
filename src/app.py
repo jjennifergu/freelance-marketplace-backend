@@ -124,7 +124,7 @@ def delete_listing(listing_id):
     return success_response(listing.serialize())
 
 
-@app.route("/listings/<int:listing_id>/", methods=["POST"])
+@app.route("/listings/edit/<int:listing_id>/", methods=["POST"])
 def edit_listing(listing_id):
     """
     Endpoint for updating a listing by id
@@ -135,7 +135,7 @@ def edit_listing(listing_id):
     if not was_successful:
         return session_token
 
-    clown = users_dao.get_user_by_session_token (session_token)
+    clown = users_dao.get_user_by_session_token(session_token)
     if not clown or not clown.verify_session_token(session_token):
         return failure_response("Invalid session token")
 
@@ -145,13 +145,13 @@ def edit_listing(listing_id):
     # process request body if listing is found
     body = json.loads(request.data)
     
-    listing.title = body.get("title")
-    listing.category = body.get("category")
-    listing.description = body.get("description")
-    listing.availability = body.get("availability")
-    listing.location = body.get("location")
-    listing.price = body.get("price")
-    listing.picture = body.get("picture")
+    listing.title = body.get("title", listing.title)
+    listing.category = body.get("category", listing.category)
+    listing.description = body.get("description", listing.description)
+    listing.availability = body.get("availability", listing.availability)
+    listing.location = body.get("location", listing.location)
+    listing.price = body.get("price", listing.price)
+    listing.picture = body.get("picture", listing.picture)
     db.session.commit()
     return success_response(listing.serialize())
 
@@ -176,7 +176,7 @@ def create_user():
     username = body.get("username")
     password = body.get("password")
     name = body.get("name")
-    bio = body.get("bio")
+    bio = ""
     contact = body.get("contact")
     
     if username is None or password is None: 
@@ -265,6 +265,8 @@ def login():
 
     if not was_successful:
         return failure_response("Incorrect username or password", 401)
+
+    user = users_dao.renew_session(user.update_token)
 
     return success_response(
         {
