@@ -1,6 +1,6 @@
 version: '3'
 services:
-  pa6:
-    image: marketplace/fp
+  circus:
+    image: jjennifergu/circus:v0
     ports:
       - "5000:5000"
