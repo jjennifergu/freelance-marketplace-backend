@@ -11,18 +11,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://34.130.212.121//api/courses/",
-					"protocol": "http",
+					"raw": "{{link}}/listings/",
 					"host": [
-						"34",
-						"130",
-						"212",
-						"121"
+						"{{link}}"
 					],
 					"path": [
-						"",
-						"api",
-						"courses",
+						"listings",
 						""
 					]
 				}
@@ -101,19 +95,35 @@
 			"name": "delete listing",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{session_token}}",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://34.130.212.121/api/courses/1/",
-					"protocol": "http",
+					"raw": "{{link}}/listings/1/",
 					"host": [
-						"34",
-						"130",
-						"212",
-						"121"
+						"{{link}}"
 					],
 					"path": [
-						"api",
-						"courses",
+						"listings",
 						"1",
 						""
 					]
@@ -157,13 +167,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{link}}/listings/1/",
+					"raw": "{{link}}/listings/9/",
 					"host": [
 						"{{link}}"
 					],
 					"path": [
 						"listings",
-						"1",
+						"9",
 						""
 					]
 				}
@@ -174,28 +184,7 @@
 			"name": "get all users",
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "*/*",
-						"type": "text"
-					},
-					{
-						"key": "Accept-Encoding",
-						"value": "gzip, deflate, br",
-						"type": "text"
-					},
-					{
-						"key": "Connection",
-						"value": "keep-alive",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer {{update_token}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "http://0.0.0.0:5000/users/",
 					"protocol": "http",
@@ -236,13 +225,13 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{_token}}",
+						"value": "Bearer {{session_token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"bt283\",\n    \"password\": \"password123\",\n    \"name\": \"Benjamin Tang\",\n    \"bio\": \"This is my bio\",\n    \"contact\": \"1231231233\"\n}",
+					"raw": "{\n    \"username\": \"tc448\",\n    \"password\": \"password123\",\n    \"name\": \"Tony Chen\",\n    \"bio\": \"This is my bio\",\n    \"contact\": \"239847938\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -271,7 +260,28 @@
 			"name": "get user by id",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{session_token}}",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://0.0.0.0:5000/users/1/",
 					"protocol": "http",
@@ -319,7 +329,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Fre shAvocadoes!\",\n    \"category\": \"Food\",\n    \"description\": \"Straight out of the ground!\",\n    \"availability\": \"Saturday 10am-2pm\",\n    \"location\": \"North\",\n    \"price\": 10\n}",
+					"raw": "{\n    \"name\": \"Benji Tang\",\n    \"bio\": \"This is my brand new bio.\",\n    \"contact\": \"293810249\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -362,13 +372,13 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{_token}}",
+						"value": "Bearer {{session_token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"bt283\",\n    \"password\": \"password123\"\n}",
+					"raw": "{\n    \"username\": \"tc448\",\n    \"password\": \"password123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -415,13 +425,13 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{_token}}",
+						"value": "Bearer {{session_token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"bt283\",\n    \"password\": \"password123\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"

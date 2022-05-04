@@ -156,19 +156,6 @@ def edit_listing(listing_id):
     return success_response(listing.serialize())
 
 
-    user = User.query.filter_by(id=user_id).first()
-    if user is None:
-        return failure_response("User not found!")
-    # process request body if listing is found
-    body = json.loads(request.data)
-    
-    user.name = body.get("name")
-    user.bio = body.get("bio")
-    user.contact = body.get("contact")
-    db.session.commit()
-    return success_response(user.serialize())
-
-
 #used for testing
 @app.route("/users/")
 def get_all_users():
