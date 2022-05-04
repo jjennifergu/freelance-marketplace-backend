@@ -31,6 +31,7 @@ class Listing(db.Model):
     availability=db.Column(db.String, nullable=False)
     location=db.Column(db.String, nullable=False)
     price=db.Column(db.Integer, nullable=False)
+    picture=db.Column(db.String, nullable=True)
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     buyers=db.relationship("User", secondary=buyer_association_table, back_populates="buyer_listings")
 
@@ -89,6 +90,8 @@ class User(db.Model):
     """
     __tablename__="users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String, nullable=False, unique=False)
+    bio = db.Column(db.String, nullable=False, unique=False)
     contact = db.Column(db.String, nullable=False)
     seller_listings=db.relationship("Listing", cascade="delete")
     buyer_listings = db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
@@ -106,6 +109,8 @@ class User(db.Model):
         """
         initializes User object
         """
+        self.name = kwargs.get("name")
+        self.bio = kwargs.get("bio")
         self.contact = kwargs.get("contact")
         self.username = kwargs.get("username", "")
         self.password_digest = bcrypt.hashpw(kwargs.get("password").encode("utf8"), bcrypt.gensalt(rounds=13))
@@ -118,6 +123,8 @@ class User(db.Model):
         return {      
             "id": self.id,      
             "username": self.username,
+            "name": self.name,
+            "bio": self.bio,
             "contact": self.contact,
             "seller_listings": [s.simple_serialize() for s in self.seller_listings],
             "buyers_listings": [b.simple_serialize() for b in self.buyer_listings]

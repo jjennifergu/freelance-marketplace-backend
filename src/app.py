@@ -47,26 +47,17 @@ def hello_world():
     return json.dumps("Hai :3")
 
 #homepage
-@app.route("/listings/")
+@app.route("/listings/", methods=["GET"])
 def get_all_listings():
     """
     Endpoint for getting all listings
-    """
-    was_successful, session_token = extract_token(request)
-
-    if not was_successful:
-        return session_token
-
-    user = users_dao.get_user_by_session_token (session_token)
-    if not user or not user.verify_session_token(session_token):
-        return failure_response("Invalid session token")
-        
+    """        
     return success_response(
         {"listings": [l.serialize() for l in Listing.query.all()]}
     )
 
 #listing details
-@app.route("/listings/<int:listing_id>/")
+@app.route("/listings/<int:listing_id>/", methods=["GET"])
 def get_listing(listing_id):
     """
     Endpoint for getting a listing by id
@@ -82,6 +73,15 @@ def create_listing(seller_id):
     """
     Endpoint for creating a listing
     """
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    clown = users_dao.get_user_by_session_token (session_token)
+    if not clown or not clown.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+
     body = json.loads(request.data)
     try:
         new_listing = Listing(
@@ -91,6 +91,7 @@ def create_listing(seller_id):
             availability = body.get("availability"),
             location = body.get("location"),
             price = body.get("price"),
+            picture = body.get("picture"),
             seller_id = seller_id,
         )
         db.session.add(new_listing)
@@ -106,12 +107,53 @@ def delete_listing(listing_id):
     """
     Endpoint for deleting a listing by id
     """
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    clown = users_dao.get_user_by_session_token (session_token)
+    if not clown or not clown.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+
     listing = Listing.query.filter_by(id=listing_id).first()
     if listing is None:
         return failure_response("Listing not found!")
     db.session.delete(listing)
     db.session.commit()
     return success_response(listing.serialize())
+
+
+@app.route("/listings/<int:listing_id>/", methods=["POST"])
+def edit_listing(listing_id):
+    """
+    Endpoint for updating a listing by id
+    """
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    clown = users_dao.get_user_by_session_token (session_token)
+    if not clown or not clown.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if listing is None:
+        return failure_response("Listing not found!")
+    # process request body if listing is found
+    body = json.loads(request.data)
+    
+    listing.title = body.get("title")
+    listing.category = body.get("category"),
+    listing.description = body.get("description"),
+    listing.availability = body.get("availability"),
+    listing.location = body.get("location"),
+    listing.price = body.get("price"),
+    listing.picture = body.get("picture")
+    db.session.commit()
+    return success_response(listing.serialize())
+
 
 #used for testing
 @app.route("/users/")
@@ -142,6 +184,8 @@ def create_user():
     body = json.loads(request.data)
     username = body.get("username")
     password = body.get("password")
+    name = body.get("name")
+    bio = body.get("bio")
     contact = body.get("contact")
     
     if username is None or password is None: 
@@ -167,7 +211,7 @@ def create_user():
     )
 
 #view profile with authentication
-@app.route("/users/<int:user_id>/")
+@app.route("/users/<int:user_id>/", methods=["GET"])
 def get_user(user_id):
     """
     Endpoint for getting a user by id
@@ -182,7 +226,33 @@ def get_user(user_id):
         return failure_response("Invalid session token")
 
     return success_response(user.serialize())
+
+
+@app.route("/users/<int:user_id>/", methods=["POST"])    
+def edit_user(user_id):
+    """
+    Endpoint for updating a listing by id
+    """
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    clown = users_dao.get_user_by_session_token (session_token)
+    if not clown or not clown.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response("User not found!")
+    # process request body if listing is found
+    body = json.loads(request.data)
     
+    user.name = body.get("name")
+    user.bio = body.get("bio")
+    user.contact = body.get("contact")
+    db.session.commit()
+    return success_response(user.serialize())
 
 #log in route
 @app.route("/login/", methods=["POST"])
@@ -222,8 +292,8 @@ def purchase_listing(listing_id, user_id):
     if not was_successful:
         return session_token
 
-    current_user = users_dao.get_user_by_session_token(session_token) 
-    if not current_user or not current_user.verify_session_token(session_token):
+    clown = users_dao.get_user_by_session_token (session_token)
+    if not clown or not clown.verify_session_token(session_token):
         return failure_response("Invalid session token")
 
     #############
@@ -241,13 +311,8 @@ def purchase_listing(listing_id, user_id):
     user.buyer_listings.append(listing)
     db.session.commit()
     return success_response(user.serialize())
-    ############
 
-    return success_response(
-        {"message": "You have successfully implemented sessions!"}
-    )
 
-    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
