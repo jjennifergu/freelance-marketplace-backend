@@ -128,6 +128,7 @@ def delete_listing(listing_id):
 def edit_listing(listing_id):
     """
     Endpoint for updating a listing by id
+    Makes a new listing instead of modifying the old one for some reason
     """
     was_successful, session_token = extract_token(request)
 
@@ -153,6 +154,19 @@ def edit_listing(listing_id):
     listing.picture = body.get("picture")
     db.session.commit()
     return success_response(listing.serialize())
+
+
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response("User not found!")
+    # process request body if listing is found
+    body = json.loads(request.data)
+    
+    user.name = body.get("name")
+    user.bio = body.get("bio")
+    user.contact = body.get("contact")
+    db.session.commit()
+    return success_response(user.serialize())
 
 
 #used for testing
@@ -211,10 +225,13 @@ def get_user(user_id):
     if not was_successful:
         return session_token
 
-    user = users_dao.get_user_by_session_token(session_token) 
-    if not user or not user.verify_session_token(session_token):
+    clown = users_dao.get_user_by_session_token(session_token) 
+    if not clown or not clown.verify_session_token(session_token):
         return failure_response("Invalid session token")
 
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response("User not found!")
     return success_response(user.serialize())
 
 
@@ -272,7 +289,7 @@ def login():
     )
 
 #purchase listing, give user id in body?
-@app.route("/listings/<int:listing_id>/<int:user_id>/purchase/", methods=["POST"])
+@app.route("/listings/<int:listing_id>/<int:user_id>/", methods=["POST"])
 def purchase_listing(listing_id, user_id):
     """
     Endpoint for purchasing a listing by listing id

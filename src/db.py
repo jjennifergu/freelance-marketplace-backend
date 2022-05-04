@@ -31,7 +31,7 @@ class Listing(db.Model):
     availability=db.Column(db.String, nullable=False)
     location=db.Column(db.String, nullable=False)
     price=db.Column(db.Integer, nullable=False)
-    picture=db.Column(db.String, nullable=True)
+    picture=db.Column(db.String, nullable=False)
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     buyers=db.relationship("User", secondary=buyer_association_table, back_populates="buyer_listings")
 
