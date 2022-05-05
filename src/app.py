@@ -201,6 +201,35 @@ def create_user():
         }, 201
     )
 
+# signup and create and return new user
+@app.route("/users/test/", methods=["POST"])
+def create_user2():
+    """
+    Endpoint for creating a user
+    """
+    body = json.loads(request.data)
+    username = body.get("username")
+    password = body.get("password")
+    name = body.get("name")
+    bio = ""
+    contact = body.get("contact")
+    
+    if username is None or password is None: 
+        return failure_response("Missing username or password")
+
+    try:
+        was_successful, user = users_dao.create_user(username, password, name, bio, contact)
+
+        if not was_successful:
+            return failure_response("User already exists")
+        # return success_response(new_course.serialize(), 201)
+    except Exception as e:
+        return failure_response(f"Invalid fields, {e}", 400)
+
+    our_user = users_dao.get_user_by_session_token(user.session_token)
+
+    return success_response(our_user.serialize())
+
 #view profile with authentication
 @app.route("/users/<int:user_id>/", methods=["GET"])
 def get_user(user_id):
