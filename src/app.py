@@ -14,7 +14,7 @@ db_filename = "todo.db"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_filename}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = False
+app.config["SQLALCHEMY_ECHO"] = True
 
 db.init_app(app)
 with app.app_context():
@@ -250,22 +250,14 @@ def get_user(user_id):
         return failure_response("User not found!")
     return success_response(user.serialize())
 
+
 #view profile with authentication
-@app.route("/users/username/<int:username>/", methods=["GET"])
-def get_user_by_username(user_id):
+@app.route("/users/username/<string:username>/", methods=["GET"])
+def get_user_by_username(username):
     """
     Endpoint for getting a user by username
     """
-    was_successful, session_token = extract_token(request)
-
-    if not was_successful:
-        return session_token
-
-    clown = users_dao.get_user_by_session_token(session_token) 
-    if not clown or not clown.verify_session_token(session_token):
-        return failure_response("Invalid session token")
-
-    user = User.query.filter_by(id=user_id).first()
+    user = User.query.filter_by(username=username).first()
     if user is None:
         return failure_response("User not found!")
     return success_response(user.serialize())

@@ -302,6 +302,52 @@
 			"response": []
 		},
 		{
+			"name": "get user by username",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{session_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://0.0.0.0:5000/users/username/1/",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5000",
+					"path": [
+						"users",
+						"username",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "edit user",
 			"request": {
 				"method": "POST",
