@@ -250,6 +250,26 @@ def get_user(user_id):
         return failure_response("User not found!")
     return success_response(user.serialize())
 
+#view profile with authentication
+@app.route("/users/username/<int:username>/", methods=["GET"])
+def get_user_by_username(user_id):
+    """
+    Endpoint for getting a user by username
+    """
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    clown = users_dao.get_user_by_session_token(session_token) 
+    if not clown or not clown.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response("User not found!")
+    return success_response(user.serialize())
+
 
 @app.route("/users/<int:user_id>/", methods=["POST"])    
 def edit_user(user_id):
