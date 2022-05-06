@@ -176,14 +176,15 @@ def create_user():
     username = body.get("username")
     password = body.get("password")
     name = body.get("name")
-    bio = ""
+    bio = body.get("bio")
     contact = body.get("contact")
+    pfp = body.get("pfp")
     
     if username is None or password is None: 
         return failure_response("Missing username or password")
 
     try:
-        was_successful, user = users_dao.create_user(username, password, name, bio, contact)
+        was_successful, user = users_dao.create_user(username, password, name, bio, contact, pfp)
 
         if not was_successful:
             return failure_response("User already exists")
@@ -211,14 +212,15 @@ def create_user2():
     username = body.get("username")
     password = body.get("password")
     name = body.get("name")
-    bio = ""
+    bio = body.get("bio")
     contact = body.get("contact")
+    pfp = body.get("pfp")
     
     if username is None or password is None: 
         return failure_response("Missing username or password")
 
     try:
-        was_successful, user = users_dao.create_user(username, password, name, bio, contact)
+        was_successful, user = users_dao.create_user(username, password, name, bio, contact, pfp)
 
         if not was_successful:
             return failure_response("User already exists")
@@ -249,6 +251,22 @@ def get_user(user_id):
     if user is None:
         return failure_response("User not found!")
     return success_response(user.serialize())
+
+#view profile with authentication
+@app.route("/users/session/", methods=["GET"])
+def get_user_by_session():
+    """
+    Endpoint for getting a user by id
+    """
+    was_successful, session_token = extract_token(request)
+
+    if not was_successful:
+        return session_token
+
+    clown = users_dao.get_user_by_session_token(session_token) 
+    if not clown or not clown.verify_session_token(session_token):
+        return failure_response("Invalid session token")
+    return success_response(clown.serialize())
 
 
 #view profile with authentication
@@ -286,6 +304,7 @@ def edit_user(user_id):
     user.name = body.get("name")
     user.bio = body.get("bio")
     user.contact = body.get("contact")
+    user.pfp = body.get("pfp")
     db.session.commit()
     return success_response(user.serialize())
 

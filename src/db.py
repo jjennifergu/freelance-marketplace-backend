@@ -31,7 +31,7 @@ class Listing(db.Model):
     availability=db.Column(db.String, nullable=False)
     location=db.Column(db.String, nullable=False)
     price=db.Column(db.Integer, nullable=False)
-    picture=db.Column(db.String, nullable=False)
+    picture=db.Column(db.String, nullable=True)
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     buyers=db.relationship("User", secondary=buyer_association_table, back_populates="buyer_listings")
 
@@ -94,8 +94,9 @@ class User(db.Model):
     __tablename__="users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False, unique=False)
-    bio = db.Column(db.String, nullable=False, unique=False)
+    bio = db.Column(db.String, nullable=True, unique=False)
     contact = db.Column(db.String, nullable=False)
+    pfp = db.Column(db.String, nullable=True)
     seller_listings=db.relationship("Listing", cascade="delete")
     buyer_listings = db.relationship("Listing", secondary=buyer_association_table, back_populates="buyers")
 
@@ -115,6 +116,7 @@ class User(db.Model):
         self.name = kwargs.get("name")
         self.bio = kwargs.get("bio")
         self.contact = kwargs.get("contact")
+        self.pfp = kwargs.get("pfp")
         self.username = kwargs.get("username", "")
         self.password_digest = bcrypt.hashpw(kwargs.get("password").encode("utf8"), bcrypt.gensalt(rounds=13))
         self.renew_session()
@@ -129,6 +131,7 @@ class User(db.Model):
             "name": self.name,
             "bio": self.bio,
             "contact": self.contact,
+            "pfp": self.pfp,
             "seller_listings": [s.simple_serialize() for s in self.seller_listings],
             "buyers_listings": [b.simple_serialize() for b in self.buyer_listings]
         }

@@ -43,7 +43,7 @@ def verify_credentials(username, password):
     return optional_user.verify_password(password), optional_user
 
 
-def create_user(username, password, name, bio, contact):
+def create_user(username, password, name, bio, contact, pfp):
     """
     Creates a User object in the database
 
@@ -54,7 +54,7 @@ def create_user(username, password, name, bio, contact):
     if optional_user is not None:
         return False, optional_user
     
-    user = User(username=username, password=password, name=name, bio=bio, contact=contact)
+    user = User(username=username, password=password, name=name, bio=bio, contact=contact, pfp=pfp)
 
     db.session.add(user)
     db.session.commit()
