@@ -51,80 +51,161 @@ Create Listing
 POST http://localhost:5000/listings/
 Request:
 {
-    "seller_id":
-    "title":
-    "description":
-    "availability:
-    "location":
-    "price":
+    title = body.get("title"),
+    category = body.get("category"),
+    description = body.get("description"),
+    availability = body.get("availability"),
+    location = body.get("location"),
+    price = body.get("price"),
+    picture = body.get("picture")
 }
 
 Delete Listing (with authentication)
 DELETE http://localhost:5000/listings/<int:listing_id>/
 <HTTP STATUS CODE 200>
+Request:
+  listing_id
+
+Return:
 {
-    "id": <>,
-    "unixTime": <>,
-    "title": <>,
-    "description": <>,
-    "availability": <>,
-    "location": <>,
-    "price": <>,
-    "sellers: <>,
-    "buyers": <>
+    title = body.get("title"),
+    category = body.get("category"),
+    description = body.get("description"),
+    availability = body.get("availability"),
+    location = body.get("location"),
+    price = body.get("price"),
+    picture = body.get("picture")
 }
+
+Edit Listing 
+POST http://localhost:5000/listings/edit/<int:listing_id>/
+Request:
+  listing_id
+Return:
+  listing.title = body.get("title", listing.title)
+  listing.category = body.get("category", listing.category)
+  listing.description = body.get("description", listing.description)
+  listing.availability = body.get("availability", listing.availability)
+  listing.location = body.get("location", listing.location)
+  listing.price = body.get("price", listing.price)
+  listing.picture = body.get("picture", listing.picture)
 
 
 Get all users for testing
 GET http://localhost:5000/users/
 <HTTP STATUS CODE 200>
+Request:
 {
-    "id": <>,
-    "username": <>,
-    "seller_listings": <>,
-    "buyer_listings": <>
+  "users": [
+    {
+      "id" = 1
+      "username" = <>,
+      "password" = <>,
+      "name" = <>,
+      "bio" = <>,
+      "contact" = <>,
+      "pfp" = <>
+    },
+    {
+      "id" = 2
+      "username" = <>,
+      "password" = <>,
+      "name" = <>,
+      "bio" = <>,
+      "contact" = <>,
+      "pfp" = <>
+    },
+    ...
+  ]
 }
 
 Sign up new user
 POST http://localhost:5000/users/
 <HTTP STATUS CODE 200>
+Request:
 {
-    "id": <>,
-    "username": <>,
-    "seller_listings": <>,
-    "buyer_listings": <>
+    username = body.get("username")
+    password = body.get("password")
+    name = body.get("name")
+    bio = body.get("bio")
+    contact = body.get("contact")
+    pfp = body.get("pfp")
 }
 
 Get user (view profile)
 GET http://localhost:5000/users/<int:user_id>/
 <HTTP STATUS CODE 200>
+Return:
 {
-    "id": <>,
-    "username": <>,
-    "seller_listings": <>,
-    "buyer_listings": <>
+    username = body.get("username")
+    password = body.get("password")
+    name = body.get("name")
+    bio = body.get("bio")
+    contact = body.get("contact")
+    pfp = body.get("pfp")
 }
 
 Log in 
 POST http://localhost:5000/login/
 <HTTP STATUS CODE 200>
+Request:
 {
     "username": <>,
     "password" <>
 }
+Return:
+  "session_token": user.session_token,
+  "session_expiration": str(user.session_expiration),
+  "update_token": user.update_token
+
+Getting User with session token
+GET http://localhost:5000/users/session/
+  username = body.get("username")
+  password = body.get("password")
+  name = body.get("name")
+  bio = body.get("bio")
+  contact = body.get("contact")
+  pfp = body.get("pfp")
+
+
+Getting user by username
+GET http://localhost:5000/users/username/<string:username>/
+Request: 
+  username
+Return: 
+  username = body.get("username")
+  password = body.get("password")
+  name = body.get("name")
+  bio = body.get("bio")
+  contact = body.get("contact")
+  pfp = body.get("pfp")
+
+Edit user
+POST http://localhost:5000/users/<int:user_id>/
+Request:
+  user_id 
+Return:
+  username = body.get("username")
+  password = body.get("password")
+  name = body.get("name")
+  bio = body.get("bio")
+  contact = body.get("contact")
+  pfp = body.get("pfp")
+
 
 Purchase listing (user id given through front end?)
 POST http://localhost:5000/listings/<int:listing_id>/purchase/
 <HTTP STATUS CODE 200>
 Request
 {
-    "id": 1,
-    "unixTime": <>,
-    "title": <>,
-    "description": <>,
-    "availability": <>,
-    "location": <>,
-    "price": <>,
-    "sellers: <>,
-    "buyers": <>
+  listing_id, user_id
+}
+Return 
+{
+  "username" = <>,
+  "password" = <>,
+  "name" = <>,
+  "bio" = <>,
+  "contact" = <>,
+  "pfp" = <>
 }
