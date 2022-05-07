@@ -44,7 +44,7 @@ def extract_token(request):
 
 @app.route("/")
 def hello_world():
-    return json.dumps("Hai :3")
+    return json.dumps("Welcome to the Circus, you clown 🤡")
 
 #homepage
 @app.route("/listings/", methods=["GET"])
