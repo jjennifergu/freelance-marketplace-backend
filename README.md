@@ -50,9 +50,13 @@ See [api.txt]: https://github.com/jjennifergu/freelance-marketplace-backend/blob
 Authentication is used. Look at the code if you don't believe us. Images are used too in the profile pictures and listing images!
 
 
+## Comments
+Due to the large number of images, you may experience some delays in nagivating Circus. Furthermore, we encode images to base-64 strings and store them in the backend, each of which are extremely long. In the future, we could implement a faster way to store and retrieve images.
+
+
 ## The Team
 **Clara Lee** cl874: Product Designer  
 **Jennifer Gu** jg2368: Full Stack Developer  
 **Tony Chen** tc448: Frontend Developer  
 **Benjamin Tang** bt283: Backend Developer  
-**Lily Pham** lp: Backend Developer  
+**Lily Pham** lnp35: Backend Developer  
