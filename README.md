@@ -30,13 +30,20 @@ On another tab on the user profile, you can see your past purchases in case you 
 
 
 **Requirements**
-At least 4 routes (1 must be GET, 1 must be POST, 1 must be DELETE)
+1. At least 4 routes (1 must be GET, 1 must be POST, 1 must be DELETE)
+get_all_listings (GET)
+get_listing (GET)
+create_listing (POST)
+delete_listing (DELETE)
 
-At least 2 tables in database with a relationship between them
+2. At least 2 tables in database with a relationship between them
+Tables: Users (including buyers and sellers), Listings
+Relationships: many-to-many (buyers and listings), one-to-many (sellers and listings)
 
-API specification explaining each implemented route
+3. API specification explaining each implemented route
+See [api.txt]: https://github.com/jjennifergu/freelance-marketplace-backend/blob/main/api.txt
 
-Implementation of images and/or authentication (only 1 required)
+4. Implementation of images and/or authentication (only 1 required)
 Authentication is used. Look at the code if you don't believe us. Images are used too in the profile pictures and listing images!
 
 
@@ -46,18 +53,3 @@ Jennifer Gu: Full Stack Developer
 Tony Chen: Frontend Developer
 Benjamin Tang: Backend Developer
 Lily Pham: Backend Developer
-
-
-
-
-App Name
-App Tagline: short one-liner description of your app
-
-
-Link(s) to any other public GitHub repo(s) of your app. If you have one repo for iOS / Android and one for Backend, please link to your backend repo in your iOS / Android README, and your iOS / Android repo in your backend README.
-
-Some screenshots of your app (highlight important features)
-A short description of your app (its purpose and features)
-A list of how your app addresses each of the requirements
-Anything else you want your grader to know
-Note: The link, screenshots, and description will be used for the Hack Challenge website where we will showcase everyone’s final projects
