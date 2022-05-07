@@ -1,13 +1,63 @@
 # freelance-marketplace-backend
 
-**App idea**
+**Circus**
+*Welcome to the Circus, you clown 🤡*
+*Connecting you with on campus freelancers.*
+At the Circus, where Cornell students can post and purchase any jobs they would like to do or be done. For example, a user can offer a haircut for $25 and another user could purchase that service. The gig industry has become exceptionally popular in recent times with the rise of companies such as Uber, Lyft, DoorDash, Fiverr, and such, and we hope to bring this to Cornell.
 
-A freelancing app for Cornell students to post and purchase any jobs they would like to do. For example, a user can offer a haircut for $25 and another user could purchase that service. 
+**Description**
+We wrote routes to implement creating, editing, removing, purchasing, and getting listings, only accessible to users who are authenticated. Furthermore, related to users, we wrote routes to create, edit, and getting users (accounts). Authentication is used throughout. To make things easier, we also implemented different ways to getting specific users as well, by session_token, and by username.
 
-Users will have to sign in to use our app (we haven't decided whether to use Google authentication or to keep our own database yet). There will be a homepage, which will display all the listings. Each user will have a profile, which will include all of their listings and past purchases. Each listing can also be clicked open to display more details and purchase information. 
+We maintain a Users table and a Listings table. A user could be a seller or a buyer. A seller has a one-to-many relationship with listings, as a listing can only have one seller. A buyer has a many-to-many relationship with listings, as a listing could be purchased by multiple buyers and a buyer can purchase multiple listings. Our association table enables the many-to-many relationship. With these relationships established we are also able to allow users to purchase listings as well. 
 
-We will build GET routes for getting all the posts, displaying a user's profile, and showing a listing's details. We will have POST routes for signing up, logging in, posting a listing, and purchasing a listing. We will have a DELETE route for deleting a listing. 
+**The Frontend**
+https://github.com/bonytoni/freelance-marketplace-frontend
 
-Some possible route ideas to implement if we have time include a POST for editing a listing, DELETE for deleting a profile, and GET/POST for leaving reviews and displaying them. 
+**User Flow**
+*Login*
+Opening the app, you are met with a signup or login page. Input your basic information, sign in, and you will be taken to the home page.
 
-We will maintain a Users table and a Listings table. It will be kind of similar to PA4, where a user could be a seller or a buyer. We will have 2 association tables, one for sellers/listings and one for buyers/listings. Since a listing could have multiple buyers and a seller associated with it, the Listing model will have a one to many relationship with the User model.
+*Hompage*
+In the homepage, you will see all the listings that you or other users have posted. Each listing is a freelance service with a picture, 
+
+
+*User Profile*
+On the user profile, you can see your profile and the listings you are selling.
+
+
+*Purchase History*
+On another tab on the user profile, you can see your past purchases in case you want to purchase them again.
+
+
+**Requirements**
+At least 4 routes (1 must be GET, 1 must be POST, 1 must be DELETE)
+
+At least 2 tables in database with a relationship between them
+
+API specification explaining each implemented route
+
+Implementation of images and/or authentication (only 1 required)
+Authentication is used. Look at the code if you don't believe us. Images are used too in the profile pictures and listing images!
+
+
+**The Team**
+Clara Lee: Product Designer
+Jennifer Gu: Full Stack Developer
+Tony Chen: Frontend Developer
+Benjamin Tang: Backend Developer
+Lily Pham: Backend Developer
+
+
+
+
+App Name
+App Tagline: short one-liner description of your app
+
+
+Link(s) to any other public GitHub repo(s) of your app. If you have one repo for iOS / Android and one for Backend, please link to your backend repo in your iOS / Android README, and your iOS / Android repo in your backend README.
+
+Some screenshots of your app (highlight important features)
+A short description of your app (its purpose and features)
+A list of how your app addresses each of the requirements
+Anything else you want your grader to know
+Note: The link, screenshots, and description will be used for the Hack Challenge website where we will showcase everyone’s final projects
