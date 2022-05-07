@@ -21,7 +21,7 @@ https://github.com/bonytoni/freelance-marketplace-frontend
 
 *Login*
 Opening the app, you are met with a signup or login page. Input your basic information, sign in, and you will be taken to the home page.  
-![Welcome](https://user-images.githubusercontent.com/52147838/167238431-e6fe98cd-db7a-40f8-8b34-722b4ffcaaf5.jpg | width=100)
+![Welcome](https://user-images.githubusercontent.com/52147838/167238431-e6fe98cd-db7a-40f8-8b34-722b4ffcaaf5.jpg) | width=100
 ![Signup](https://user-images.githubusercontent.com/52147838/167238436-ab35ee73-af77-4d12-8c98-1dffb97e9033.jpg | width=100)
 
 *Hompage*
