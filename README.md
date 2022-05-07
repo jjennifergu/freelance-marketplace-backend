@@ -20,16 +20,20 @@ We maintain a Users table and a Listings table. A user could be a seller or a bu
 https://github.com/bonytoni/freelance-marketplace-frontend
 
 *Login*
-Opening the app, you are met with a signup or login page. Input your basic information, sign in, and you will be taken to the home page.
+Opening the app, you are met with a signup or login page. Input your basic information, sign in, and you will be taken to the home page.  
+![Welcome](https://user-images.githubusercontent.com/52147838/167238431-e6fe98cd-db7a-40f8-8b34-722b4ffcaaf5.jpg | width=100)
+![Signup](https://user-images.githubusercontent.com/52147838/167238436-ab35ee73-af77-4d12-8c98-1dffb97e9033.jpg | width=100)
 
 *Hompage*
-In the homepage, you will see all the listings that you or other users have posted. Each listing is a freelance service with a picture, 
+In the homepage, you will see all the listings that you or other users have posted. Each listing is a freelance service with a picture and all the information you need to know about it.  
+![Homepage](https://user-images.githubusercontent.com/52147838/167238441-6e2096a8-a2d1-4ac5-9e45-2a7e52bc783e.jpg | width=100)
+![Listing](https://user-images.githubusercontent.com/52147838/167238448-afd9236d-285d-4683-bc02-9d3646f17034.jpg | width=100)
 
 *User Profile*
-On the user profile, you can see your profile and the listings you are selling.
-
-*Purchase History*
-On another tab on the user profile, you can see your past purchases in case you want to purchase them again.
+On the user profile, you can see your profile and the listings you are selling. You can also add your own listings, and see the ones you bought!  
+![Profile](https://user-images.githubusercontent.com/52147838/167238463-82f18043-7dd7-4677-8195-d98cd12359a7.jpg | width=100)
+![Post](https://user-images.githubusercontent.com/52147838/167238473-daa5b2ae-d6e5-46c3-a216-cee0f2e8b391.jpg | width=100)
+![History](https://user-images.githubusercontent.com/52147838/167238488-021da3f7-47ae-406d-81a3-d0ff564c4aeb.jpg | width=100)
 
 
 ## The Requirements
@@ -51,7 +55,7 @@ Authentication is used. Look at the code if you don't believe us. Images are use
 
 
 ## Comments
-Due to the large number of images, you may experience some delays in nagivating Circus. Furthermore, we encode images to base-64 strings and store them in the backend, each of which are extremely long. In the future, we could implement a faster way to store and retrieve images.
+Due to the large number of images, you may experience some delays in nagivating Circus. Furthermore, we encode images to base-64 strings and store them in the backend, as recommended by the TAs, but each of them are extremely long. In the future, we could implement a faster way to store and retrieve images.
 
 
 ## The Team
