@@ -51,13 +51,13 @@ Create Listing
 POST http://localhost:5000/listings/
 Request:
 {
-    title = body.get("title"),
-    category = body.get("category"),
-    description = body.get("description"),
-    availability = body.get("availability"),
-    location = body.get("location"),
-    price = body.get("price"),
-    picture = body.get("picture")
+    "title" = <>,
+    "category" = <>,
+    "description" = <>,
+    "availability" = <>,
+    "location" = <>,
+    "price" = <>,
+    "picture" = <>
 }
 
 Delete Listing (with authentication)
@@ -68,13 +68,13 @@ Request:
 
 Return:
 {
-    title = body.get("title"),
-    category = body.get("category"),
-    description = body.get("description"),
-    availability = body.get("availability"),
-    location = body.get("location"),
-    price = body.get("price"),
-    picture = body.get("picture")
+    "title" = <>,
+    "category" = <>,
+    "description" = <>,
+    "availability" = <>,
+    "location" = <>,
+    "price" = <>,
+    "picture" = <>
 }
 
 Edit Listing 
@@ -82,13 +82,13 @@ POST http://localhost:5000/listings/edit/<int:listing_id>/
 Request:
   listing_id
 Return:
-  listing.title = body.get("title", listing.title)
-  listing.category = body.get("category", listing.category)
-  listing.description = body.get("description", listing.description)
-  listing.availability = body.get("availability", listing.availability)
-  listing.location = body.get("location", listing.location)
-  listing.price = body.get("price", listing.price)
-  listing.picture = body.get("picture", listing.picture)
+  "title" = <>,
+  "category" = <>,
+  "description" = <>,
+  "availability" = <>,
+  "location" = <>,
+  "price" = <>,
+  "picture" = <>
 
 
 Get all users for testing
@@ -124,12 +124,12 @@ POST http://localhost:5000/users/
 <HTTP STATUS CODE 200>
 Request:
 {
-    username = body.get("username")
-    password = body.get("password")
-    name = body.get("name")
-    bio = body.get("bio")
-    contact = body.get("contact")
-    pfp = body.get("pfp")
+  "username" = <>,
+  "password" = <>,
+  "name" = <>,
+  "bio" = <>,
+  "contact" = <>,
+  "pfp" = <>
 }
 
 Get user (view profile)
@@ -137,12 +137,12 @@ GET http://localhost:5000/users/<int:user_id>/
 <HTTP STATUS CODE 200>
 Return:
 {
-    username = body.get("username")
-    password = body.get("password")
-    name = body.get("name")
-    bio = body.get("bio")
-    contact = body.get("contact")
-    pfp = body.get("pfp")
+  "username" = <>,
+  "password" = <>,
+  "name" = <>,
+  "bio" = <>,
+  "contact" = <>,
+  "pfp" = <>
 }
 
 Log in 
@@ -154,18 +154,20 @@ Request:
     "password" <>
 }
 Return:
-  "session_token": user.session_token,
-  "session_expiration": str(user.session_expiration),
-  "update_token": user.update_token
+  "session_token": <user.session_token>,
+  "session_expiration": <str(user.session_expiration)>,
+  "update_token": <user.update_token>
 
 Getting User with session token
 GET http://localhost:5000/users/session/
-  username = body.get("username")
-  password = body.get("password")
-  name = body.get("name")
-  bio = body.get("bio")
-  contact = body.get("contact")
-  pfp = body.get("pfp")
+{
+  "username" = <>,
+  "password" = <>,
+  "name" = <>,
+  "bio" = <>,
+  "contact" = <>,
+  "pfp" = <>
+}
 
 
 Getting user by username
@@ -173,24 +175,36 @@ GET http://localhost:5000/users/username/<string:username>/
 Request: 
   username
 Return: 
-  username = body.get("username")
-  password = body.get("password")
-  name = body.get("name")
-  bio = body.get("bio")
-  contact = body.get("contact")
-  pfp = body.get("pfp")
+{
+  "username" = <>,
+  "password" = <>,
+  "name" = <>,
+  "bio" = <>,
+  "contact" = <>,
+  "pfp" = <>
+}
 
 Edit user
 POST http://localhost:5000/users/<int:user_id>/
 Request:
-  user_id 
+  user_id ,
+  {
+  "username" = <>,
+  "password" = <>,
+  "name" = <>,
+  "bio" = <>,
+  "contact" = <>,
+  "pfp" = <>
+  }
 Return:
-  username = body.get("username")
-  password = body.get("password")
-  name = body.get("name")
-  bio = body.get("bio")
-  contact = body.get("contact")
-  pfp = body.get("pfp")
+{
+  "username" = <>,
+  "password" = <>,
+  "name" = <>,
+  "bio" = <>,
+  "contact" = <>,
+  "pfp" = <>
+}
 
 
 Purchase listing (user id given through front end?)
