@@ -1,7 +1,7 @@
 # Circus
 
 ## Circus: Connecting you with on-campus freelancers.
-*Welcome to the Circus, you clown 🤡*
+
 
 At the Circus, Cornellians can post and purchase any jobs they would like to do or be done. For example, a user can offer a haircut for $25 and another user could purchase that service. After creating an account, users can browse for services they may be interested in in an Etsy-style homepage, and contact, utilizing the filters we have implemented. You can also post your own listings and become a provider account!
 
@@ -17,7 +17,7 @@ We maintain a Users table and a Listings table. A user could be a seller or a bu
 
 
 ## The Frontend
-https://github.com/bonytoni/freelance-marketplace-frontend
+https://github.com/jjennifergu/freelance-marketplace-frontend
 
 *Login*  
 Opening the app, you are met with a signup or login page. Input your basic information, sign in, and you will be taken to the home page.  
