@@ -53,7 +53,7 @@ Relationships: many-to-many (buyers and listings), one-to-many (sellers and list
 See [api.txt]: https://github.com/jjennifergu/freelance-marketplace-backend/blob/main/api.txt
 
 4. Implementation of images and/or authentication (only 1 required)  
-Authentication is used. Look at the code if you don't believe us. Images are used too in the profile pictures and listing images!
+We implemented our own session/token-based authentication to allow users to sign up and log in. Images are also used in the profile pictures and listing covers!
 
 
 ## Comments
